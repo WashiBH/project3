@@ -1,0 +1,248 @@
+openapi: '3.0.0'
+
+info:
+  title: Customers bank service
+  description: Customers service
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8581
+
+tags:
+  - name: customers
+
+paths:
+  /customers:
+    post:
+      tags:
+        - customers
+      summary: Add a new customer to the database
+      description: Add a new customer to the database
+      operationId: addCustomer
+      requestBody:
+        description: Create a new customer in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CustomerDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "405":
+          description: Invalid input
+  /customers/{id}:
+    put:
+      tags:
+        - customers
+      summary: Update an existing customer
+      description: Update an existing customer by Id
+      operationId: updateCustomer
+      parameters:
+        - name: id
+          in: path
+          description: ID of customer to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent customer in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CustomerDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Customer not found
+        "405":
+          description: Validation exception
+    get:
+      tags:
+        - customers
+      summary: Find customer by ID
+      description: Returns a single customer
+      operationId: getCustomerById
+      parameters:
+        - name: id
+          in: path
+          description: ID of customer to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CustomerDto'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Customer not found
+    delete:
+      tags:
+        - customers
+      summary: Delete a customer
+      description: delete a customer
+      operationId: deleteCustomer
+      parameters:
+        - name: id
+          in: path
+          description: Customer id to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "400":
+          description: Invalid customer value
+  /customers/document/{document}:
+    get:
+      tags:
+        - customers
+      summary: Find customer by document number
+      description: Returns a single customer
+      operationId: getCustomerByDocumentNumber
+      parameters:
+        - name: document
+          in: path
+          description: Document number of customer to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CustomerDto'
+        "400":
+          description: Invalid document supplied
+        "404":
+          description: Customer not found
+components:
+  schemas:
+    Response:
+      type: object
+      additionalProperties:
+        type: object
+    CustomerDto:
+      required:
+        - customerType
+        - documentType
+        - documentNumber
+        - names
+        - surnames
+        - email
+        - phone
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        customerType:
+          type: string
+          description: Customer type
+          enum:
+            - PERSONA
+            - PERSONA_VIP
+            - EMPRESA
+            - PYME
+        documentType:
+          type: string
+          description: Document type
+          enum:
+            - DNI
+            - RUC
+            - CE
+        documentNumber:
+          type: string
+          description: Document number
+          minLength: 8
+          maxLength: 15
+          pattern: '[0-9]{8,15}'
+          example: "11111111"
+        names:
+          type: string
+          description: Names
+          example: Washington
+        surnames:
+          type: string
+          description: Surnames
+          example: Blas Huaman
+        businessName:
+          type: string
+          description: BusinessName
+          example: Washington Blas Huaman
+        email:
+          type: string
+          description: email
+          pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$'
+          example: washington.blas.h@gmail.com
+        phone:
+          type: string
+          description: phone
+          pattern: '(\+51|51|)[0-9]+'
+          example: "+51940000000"
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation date
+          example: "2023-09-18T20:30:00Z"
+          readOnly: true
+      xml:
+        name: customer
+  requestBodies:
+    customer:
+      description: customer object that needs to be added to the database
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomerDto'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/CustomerDto'
