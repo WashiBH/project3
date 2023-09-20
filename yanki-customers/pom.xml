@@ -8,10 +8,10 @@
 		<version>2.7.15</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.project</groupId>
-	<artifactId>customers</artifactId>
+	<groupId>com.proyect</groupId>
+	<artifactId>yanki-customers</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>customers</name>
+	<name>yanki-customers</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -131,14 +131,13 @@
 						<configuration>
 							<inputSpec>${project.basedir}/src/main/resources/api.yml</inputSpec>
 							<generatorName>spring</generatorName>
-							<packageName>com.project.customers</packageName>
-							<apiPackage>com.project.customers.api</apiPackage>
-							<modelPackage>com.project.customers.dto</modelPackage>
+							<packageName>com.project.yankicustomers</packageName>
+							<apiPackage>com.project.yankicustomers.api</apiPackage>
+							<modelPackage>com.project.yankicustomers.dto</modelPackage>
 							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
 							<configOptions>
 								<reactive>true</reactive>
 								<interfaceOnly>true</interfaceOnly>
-								<!--<delegatePattern>true</delegatePattern>-->
 								<serializableModel>true</serializableModel>
 							</configOptions>
 						</configuration>

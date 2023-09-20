@@ -1,30 +1,30 @@
 openapi: '3.0.0'
 
 info:
-  title: Customers bank service
-  description: Clientes del banco
+  title: Yanki customers
+  description: Clientes del monedero movil Yanki
   version: 1.0.0
 
 servers:
-  - url: http://localhost:8581
+  - url: http://localhost:8582
 
 tags:
-  - name: customers
+  - name: yankicustomers
 
 paths:
-  /customers:
+  /yankicustomers:
     post:
       tags:
-        - customers
-      summary: Add a new customer to the database
-      description: Add a new customer to the database
-      operationId: addCustomer
+        - yankicustomers
+      summary: Add a new yanki customer to the database
+      description: Add a new yanki customer to the database
+      operationId: addYankiCustomer
       requestBody:
-        description: Create a new customer in the database
+        description: Create a new yanki customer in the database
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerDto'
+              $ref: '#/components/schemas/YankiCustomerDto'
         required: true
       responses:
         "200":
@@ -32,29 +32,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDto'
+                $ref: '#/components/schemas/YankiCustomerDto'
         "405":
           description: Invalid input
-  /customers/{id}:
+  /yankicustomers/{id}:
     put:
       tags:
-        - customers
-      summary: Update an existing customer
-      description: Update an existing customer by Id
-      operationId: updateCustomer
+        - yankicustomers
+      summary: Update an existing yanki customer
+      description: Update an existing yanki customer by Id
+      operationId: updateYankiCustomer
       parameters:
         - name: id
           in: path
-          description: ID of customer to update
+          description: ID of yanki customer to update
           required: true
           schema:
             type: string
       requestBody:
-        description: Update an existent customer in the database
+        description: Update an existent yanki customer in the database
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerDto'
+              $ref: '#/components/schemas/YankiCustomerDto'
         required: true
       responses:
         "200":
@@ -62,23 +62,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDto'
+                $ref: '#/components/schemas/YankiCustomerDto'
         "400":
           description: Invalid ID supplied
         "404":
-          description: Customer not found
+          description: Yanki customer not found
         "405":
           description: Validation exception
     get:
       tags:
-        - customers
-      summary: Find customer by ID
-      description: Returns a single customer
-      operationId: getCustomerById
+        - yankicustomers
+      summary: Find yanki customer by ID
+      description: Returns a single yanki customer
+      operationId: getYankiCustomerById
       parameters:
         - name: id
           in: path
-          description: ID of customer to return
+          description: ID of yanki customer to return
           required: true
           style: simple
           explode: false
@@ -90,21 +90,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDto'
+                $ref: '#/components/schemas/YankiCustomerDto'
         "400":
           description: Invalid ID supplied
         "404":
           description: Customer not found
     delete:
       tags:
-        - customers
-      summary: Delete a customer
-      description: delete a customer
-      operationId: deleteCustomer
+        - yankicustomers
+      summary: Delete a yanki customer
+      description: delete a yanki customer
+      operationId: deleteYankiCustomer
       parameters:
         - name: id
           in: path
-          description: Customer id to delete
+          description: Yanki customer id to delete
           required: true
           style: simple
           explode: false
@@ -112,14 +112,14 @@ paths:
             type: string
       responses:
         "400":
-          description: Invalid customer value
-  /customers/document/{document}:
+          description: Invalid yanki customer value
+  /yankicustomers/document/{document}:
     get:
       tags:
-        - customers
-      summary: Find customer by document number
+        - yankicustomers
+      summary: Find yanki customer by document number
       description: Returns a single customer
-      operationId: getCustomerByDocumentNumber
+      operationId: getYankiCustomerByDocumentNumber
       parameters:
         - name: document
           in: path
@@ -135,41 +135,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDto'
+                $ref: '#/components/schemas/YankiCustomerDto'
         "400":
-          description: Invalid document supplied
+          description: Invalid document number supplied
         "404":
-          description: Customer not found
+          description: Yanki customer not found
 components:
   schemas:
-    CustomerDto:
+    YankiCustomerDto:
       required:
-        - customerType
         - documentType
         - documentNumber
         - names
         - surnames
         - email
         - phone
+        - imei
       type: object
       properties:
         id:
           type: string
           readOnly: true
-        customerType:
-          type: string
-          description: Customer type
-          enum:
-            - PERSONA
-            - PERSONA_VIP
-            - EMPRESA
-            - PYME
         documentType:
           type: string
           description: Document type
           enum:
             - DNI
-            - RUC
             - CEX
             - PASAPORTE
         documentNumber:
@@ -187,10 +178,6 @@ components:
           type: string
           description: Surnames
           example: Blas Huaman
-        businessName:
-          type: string
-          description: BusinessName
-          example: Washington Blas Huaman
         email:
           type: string
           description: email
@@ -201,6 +188,13 @@ components:
           description: phone
           pattern: '(\+51|51|)[0-9]+'
           example: "+51940000000"
+        imei:
+          type: string
+          description: Phone IMEI
+          minLength: 15
+          maxLength: 15
+          pattern: '[0-9]{15}'
+          example: "111111110000000"
         createdAt:
           type: string
           format: date-time
